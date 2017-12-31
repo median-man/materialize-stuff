@@ -1,0 +1,18 @@
+{
+  "name": "pattons-best",
+  "version": "0.0.1",
+  "description": "A collection of tools to help when playing the Patton's Best board game originally produced by Avalon Hill.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha -w"
+  },
+  "author": "John Desrosiers",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.1.0"
+  }
+}
