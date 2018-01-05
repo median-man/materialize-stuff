@@ -1,10 +1,44 @@
 const { expect } = chai;
 
-// sanity check
-describe('This test', () => {
-    it('works', () => {
-        expect(true).to.be.true;
-    })
+describe('Enemy Activation Table', () => {
+    describe('TableView', () => {
+      describe('constructor function', () => {
+        it('accepts a selector parameter and an array of data');
+        it('adds a row for each item in the array of data');
+        it('sets the scenario property to an empty string');
+      });
+      describe('when the advance column header is clicked', () => {
+        it('sets the scenario property to "advance"');
+        it('highlights the advance column and removes highlighting from the other columns');
+      });
+      describe('when the battle column header is clicked', () => {
+        it('sets the scenario property to "battle"');
+        it('highlights the battle column and removes highlighting from the other columns');
+      });
+      describe('when the counter attack column header is clicked', () => {
+        it('sets the scenario property to "counterattack"');
+        it('highlights the counter attack column and removes highlighting from the other columns');
+      });
+      describe('highlightRow method', () => {
+        it('highlights the first row when passed a 0 and clears highlighting from all other rows');
+        it('highlights the fourth row when passed a 4 and clears highlighting from all other rows');
+        it('highlights the seventh row when passed a 7 and clears highlighting from all other rows');
+      });
+      describe('selectUnit method', () => {
+        describe('when scenario is "advance" and row param is 0', () => {
+          it('adds the "result" class to the cell in the first row of the ' +
+            'advance column and removes it from all other cells');
+        });        
+        describe('when scenario is "counterattack" and row param is 5', () => {
+          it('adds the "result" class to the cell in the sixth row of the ' +
+            'counter attack column and removes it from all other cells');
+        });
+        describe('when scenario is "battle" and row param is 13', () => {
+          it('adds the "result" class to the cell in the 14th row of the ' +
+            'battle column and removes it from all other cells');
+        });
+      });
+    });
 });
 /* 
 enemyActivationData is an array where each item is an object
