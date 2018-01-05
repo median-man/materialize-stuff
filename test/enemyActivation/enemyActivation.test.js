@@ -35,14 +35,19 @@ describe('Enemy Activation Table', () => {
         `roll = ${roll}, scenario = ${scenario}`,
       ).to.throw();
     }
-    it('requires a roll parameter from 1 to 100', () => {
-      expect(() => activateUnit(1, 'advance')).to.not.throw();
+    it('throws is roll parameter is not from 1 to 100', () => {
       failingTest(0, 'advance');
       failingTest(101, 'advance');
     });
     it('requires a scenario property', () => {
       failingTest(1);
     });
+    it('does not throw when scenario property is "advance", "battle", or "counterattack"', () => {
+      expect(() => activateUnit(1, 'advance')).to.not.throw();
+      expect(() => activateUnit(1, 'battle')).to.not.throw();
+      expect(() => activateUnit(1, 'counterattack')).to.not.throw();
+    });
+    // Function to test the result of the activateUnit method
     function testActivateUnit(roll, scenario, unit, note) {
       describe(`when the roll is ${roll} and the scenario is "${scenario}"`, () => {
         const result = activateUnit(roll, scenario);
@@ -68,6 +73,7 @@ describe('Enemy Activation Table', () => {
     testActivateUnit(5, 'advance', 'SPG', 1);
     testActivateUnit(99, 'advance', 'SPG');
     testActivateUnit(1, 'battle', 'SPG');
+    testActivateUnit(71, 'counterattack', 'TANK', 1);
 
     // describe('when the roll is 11 adn the scenario is "advance"', () => {})
 
