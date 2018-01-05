@@ -1,45 +1,56 @@
 const { expect } = chai;
 
 describe('Enemy Activation Table', () => {
-    describe('TableView', () => {
-      describe('constructor function', () => {
-        it('accepts a selector parameter and an array of data');
-        it('adds a row for each item in the array of data');
-        it('sets the scenario property to an empty string');
+  describe('when the activate unit button is clicked and the advance scenario is selected', () => {
+    it('generates a random number from 1 to 100 inclusive');
+    describe('when a 14 is rolled', () => {
+      it('marks the unit in the cell at the 3rd row in the advance column');
+      it('adds a message to the log for the roll');
+      it('adds a message to the log for the result');
+      describe('the roll message added to the log', () => {
+        it('has a pattern like "h:m:ss am/pm: Rolled a 14 on the Enemy Activation Table"')
       });
-      describe('when the advance column header is clicked', () => {
-        it('sets the scenario property to "advance"');
-        it('highlights the advance column and removes highlighting from the other columns');
-      });
-      describe('when the battle column header is clicked', () => {
-        it('sets the scenario property to "battle"');
-        it('highlights the battle column and removes highlighting from the other columns');
-      });
-      describe('when the counter attack column header is clicked', () => {
-        it('sets the scenario property to "counterattack"');
-        it('highlights the counter attack column and removes highlighting from the other columns');
-      });
-      describe('highlightRow method', () => {
-        it('highlights the first row when passed a 0 and clears highlighting from all other rows');
-        it('highlights the fourth row when passed a 4 and clears highlighting from all other rows');
-        it('highlights the seventh row when passed a 7 and clears highlighting from all other rows');
-      });
-      describe('selectUnit method', () => {
-        describe('when scenario is "advance" and row param is 0', () => {
-          it('adds the "result" class to the cell in the first row of the ' +
-            'advance column and removes it from all other cells');
-        });        
-        describe('when scenario is "counterattack" and row param is 5', () => {
-          it('adds the "result" class to the cell in the sixth row of the ' +
-            'counter attack column and removes it from all other cells');
-        });
-        describe('when scenario is "battle" and row param is 13', () => {
-          it('adds the "result" class to the cell in the 14th row of the ' +
-            'battle column and removes it from all other cells');
-        });
+      describe('the result message added to the log', () => {
+        it('is added after the roll message');
+        it('has a pattern like "h:m:ss am/pm: A LW unit was activated"');
       });
     });
+  });
+  describe('when the activate unit button is clicked and the battle scenario is selected', () => {
+    it('generates a random number from 1 to 100 inclusive');
+    describe('when a 72 is rolled', () => {
+      it('marks the unit in the cell at the 15th row in the battle column');
+      it('adds a message to the log for the roll');
+      it('adds a message to the log for the result');
+      describe('the roll message added to the log', () => {
+        it('has a pattern like "h:m:ss am/pm: Rolled a 72 on the Enemy Activation Table"')
+      });
+      describe('the result message added to the log', () => {
+        it('is added after the roll message');
+        it('has a pattern like "h:m:ss am/pm: A SPG(2) unit was activated"');
+        it('note 2 is given a pulse animation');
+      });
+    });
+  });
 });
+
+/* Story: Activate Unit
+  As a user of the table
+  In order spend less time rolling dice and lookin gup info on a table
+  I want to get the activated unit by clicking a button
+  And I want to see what number was rolled
+
+  Scenario 1: Unit is activated
+  Given that I have chosen the advance scenario
+  When I click the activate button
+  Then a random number from 1 to 100 should be displayed
+  Given that the number rolled is 14
+  And the cell for the unit is in the third row (corresponds to a roll of 14)
+  Then I should see the activated unit marked on the table in its cell in the 3rd row of the advance column
+  And the row of the selected unit should be called out visibly
+  And an entry of the action should be added to the log
+*/
+
 /* 
 enemyActivationData is an array where each item is an object
 with the following schema:
