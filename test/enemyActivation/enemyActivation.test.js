@@ -1,6 +1,88 @@
+/* globals generateRoll activateUnit */
 const { expect } = chai;
 
 describe('Enemy Activation Table', () => {
+  describe('generateRoll()', () => {
+    it('accepts a seed, min, and max parameters', () => {
+      expect(() => generateRoll(0.607, 1, 100)).to.not.throw();
+    });
+    // Function to run an array of tests given against a given min and max
+    // where each element in tests is an object { seed: number, result: number }
+    function testGenerateRoll(min, max, tests) {
+      describe(`when min is ${min} and max is ${max}`, () => {
+        tests.forEach(({ seed, result }) => {
+          it(`returns ${result} when the seed is ${seed}`, () => {
+            expect(generateRoll(seed, min, max)).to.equal(result);
+          });
+        });
+      });
+    }
+    testGenerateRoll(1, 100, [
+      { seed: 0, result: 1 },
+      { seed: 0.6071997, result: 61 },
+      { seed: 0.99, result: 100 },
+    ]);
+    testGenerateRoll(0, 9, [
+      { seed: 0, result: 0 },
+      { seed: 0.9999999, result: 9 },
+      { seed: 0.4704769, result: 4 },
+    ]);
+  });
+  describe('activateUnit()', () => {
+    function failingTest(roll, scenario) {
+      expect(
+        () => activateUnit(roll, scenario),
+        `roll = ${roll}, scenario = ${scenario}`,
+      ).to.throw();
+    }
+    it('requires a roll parameter from 1 to 100', () => {
+      expect(() => activateUnit(1, 'advance')).to.not.throw();
+      failingTest(0, 'advance');
+      failingTest(101, 'advance');
+    });
+    it('requires a scenario property', () => {
+      failingTest(1);
+    });
+    function testActivateUnit(roll, scenario, unit, note) {
+      describe(`when the roll is ${roll} and the scenario is "${scenario}"`, () => {
+        const result = activateUnit(roll, scenario);
+        it(`returns an object where the unit property is "${unit}"`, () => {
+          expect(result.unit).to.equal(unit);
+        });
+        if (!unit) {
+          it('returns an object that does not have a note property', () => {
+            expect(result.note).to.not.exist; // eslint-disable-line no-unused-expressions
+          });
+        } else {
+          it(`returns an object where the note property is ${note}`, () => {
+            expect(result.note).to.equal(note);
+          });
+        }
+      });
+    }
+    testActivateUnit(6, 'advance', 'MG');
+    testActivateUnit(11, 'advance', 'LW');
+    testActivateUnit(12, 'advance', 'LW');
+    testActivateUnit(16, 'advance', 'TRUCK');
+    testActivateUnit(20, 'advance', 'TRUCK');
+    testActivateUnit(5, 'advance', 'SPG', 1);
+    testActivateUnit(99, 'advance', 'SPG');
+    testActivateUnit(1, 'battle', 'SPG');
+
+    // describe('when the roll is 11 adn the scenario is "advance"', () => {})
+
+    /* describe('when the roll is 21', () => {
+      const result = activateUnit(1);
+      it('returns an object', () => {
+        expect(result).to.be.an('object');
+      });
+      describe('the object returned', () => {
+        it('has a unit property equal to ', () => {
+          expect(result.unit).to.exist;
+        })
+      });
+    }); */
+  });
   describe('when the activate unit button is clicked and the advance scenario is selected', () => {
     it('generates a random number from 1 to 100 inclusive');
     describe('when a 14 is rolled', () => {
@@ -8,7 +90,7 @@ describe('Enemy Activation Table', () => {
       it('adds a message to the log for the roll');
       it('adds a message to the log for the result');
       describe('the roll message added to the log', () => {
-        it('has a pattern like "h:m:ss am/pm: Rolled a 14 on the Enemy Activation Table"')
+        it('has a pattern like "h:m:ss am/pm: Rolled a 14 on the Enemy Activation Table"');
       });
       describe('the result message added to the log', () => {
         it('is added after the roll message');
@@ -23,7 +105,7 @@ describe('Enemy Activation Table', () => {
       it('adds a message to the log for the roll');
       it('adds a message to the log for the result');
       describe('the roll message added to the log', () => {
-        it('has a pattern like "h:m:ss am/pm: Rolled a 72 on the Enemy Activation Table"')
+        it('has a pattern like "h:m:ss am/pm: Rolled a 72 on the Enemy Activation Table"');
       });
       describe('the result message added to the log', () => {
         it('is added after the roll message');
@@ -46,12 +128,13 @@ describe('Enemy Activation Table', () => {
   Then a random number from 1 to 100 should be displayed
   Given that the number rolled is 14
   And the cell for the unit is in the third row (corresponds to a roll of 14)
-  Then I should see the activated unit marked on the table in its cell in the 3rd row of the advance column
+  Then I should see the activated unit marked on the table in its cell in the 3rd row of the ...
+    ... advance column
   And the row of the selected unit should be called out visibly
   And an entry of the action should be added to the log
 */
 
-/* 
+/*
 enemyActivationData is an array where each item is an object
 with the following schema:
 Row {
@@ -113,26 +196,32 @@ Row {
 
 
 // get a random number from 1 to 100
-// an animation should display where rows are highlighted randomly for a short period of time until stopping
+// an animation should display where rows are highlighted randomly for a short period of time ...
+//  ... until stopping
 // on the correct row based on the roll.
-// the unit at the intersection of the row and column should be highlighted and bolded and have an animation
+// the unit at the intersection of the row and column should be highlighted and bolded and have ...
+//  ... an animation
 // there should be a log message added at the bottom of the table
 
 // end of + button click operation
 
 // rendering the table
-// there should be a tableView constructor which accepts a query selector string and an array of data to display
+// there should be a tableView constructor which accepts a query selector string and an array of ...
+//  ... data to display
 // a row should be created for each element of the data array and appended to the table
-// the constructor should create an on click listener for the scenario headers (user input for scenario)
-    // when the user clicks one of the scenario column headers
-    // the column should be highlighted
-    // other columns should not be highlighted
+// the constructor should create an on click listener for the scenario headers (user input ...
+//  ... for scenario)
+// when the user clicks one of the scenario column headers
+// the column should be highlighted
+// other columns should not be highlighted
 // the constructor should create click listener for the '+' button
-    // refer to comments above for the handling operation
+// refer to comments above for the handling operation
 // the table object should provide a method which starts the roll animation
-    // this method should accept a time parameter and a index for the row that should be displayed
-    // the row highlighting animation should run for the specified time before stopping on the indicated row
+// this method should accept a time parameter and a index for the row that should be displayed
+// the row highlighting animation should run for the specified time before stopping on the ...
+//  ... indicated row
 
 // the log
 // there should be a logView constructor which accepts a query selector string
-// the push method should accept a string as a paremter and add the string to the top of the log with a timestamp
+// the push method should accept a string as a paremter and add the string to the top of the log ...
+//  ... with a timestamp
