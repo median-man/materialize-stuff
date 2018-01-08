@@ -40,3 +40,8 @@ function activateUnit(roll, scenario) {
   if (!scenario) throw new Error('Invalid scenario parameter');
   return table[scenario].find(({ max }) => roll <= max);
 }
+
+function TableView(selector) {
+    this.$view = $(selector);
+    if (!this.$view.length) throw new Error(`Invalid selector: ${selector}`);
+}

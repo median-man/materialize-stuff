@@ -1,8 +1,54 @@
-/* globals generateRoll activateUnit */
+/* globals generateRoll activateUnit TableView */
 const { expect } = chai;
 
 describe('Enemy Activation Table', () => {
-  describe('generateRoll()', () => {
+  const clearFixture = () => $('#testFixture').empty();
+  describe('TableView', () => {
+    const actTblId = 'activationTable';
+    const selector = `#${actTblId}`;
+    const testRows = [
+      [{ unit: 'LW' }, { unit: 'LW' }, { unit: 'LW' }],
+    ];
+    function setupFixture() {
+      // clear out the fixtures and create the test structure
+      clearFixture();
+      return $('<table>', { id: actTblId }).appendTo('#testFixture');
+    }
+    describe('constructor', () => {
+      let $table = null;
+      let tblView = null;
+      before(() => {
+        $table = setupFixture();
+      });
+      it('throws if the selector is not valid', () => {
+        expect(() => new TableView(selector, testRows), 'a valid selector').to.not.throw();
+        expect(() => new TableView('#notFound', testRows)).to.throw();
+      });
+      it('creates a tbody element inside the table', () => {
+        tblView = new TableView(selector, testRows);
+        expect($table.has('tbody').length, 'tbody').to.equal(1); // eslint-disable-line no-unused-expressions
+      });
+    });
+
+    /* describe('addRows()', () => {
+      let tableView = null;
+      let $tblViewFixture = null;
+      const testData = ['one', 'two', 'three'];
+      before(() => {
+        $tblViewFixture = setupFixture();
+        tableView = new TableView(selector);
+
+        // there should be no rows if setup worked correctly. Tests depend on this state.
+        expect($tblViewFixture.find('tr').length, 'no rows present').to.equal(0);
+      });
+
+      it('adds a row to the table for each item in the array', () => {
+        tableView.addRows(testData);
+        it($tblViewFixture)
+      });
+    }); */
+  });
+  describe.skip('generateRoll()', () => {
     it('accepts a seed, min, and max parameters', () => {
       expect(() => generateRoll(0.607, 1, 100)).to.not.throw();
     });
@@ -28,7 +74,7 @@ describe('Enemy Activation Table', () => {
       { seed: 0.4704769, result: 4 },
     ]);
   });
-  describe('activateUnit()', () => {
+  describe.skip('activateUnit()', () => {
     function failingTest(roll, scenario) {
       expect(
         () => activateUnit(roll, scenario),
@@ -124,7 +170,7 @@ describe('Enemy Activation Table', () => {
 
 /* Story: Activate Unit
   As a user of the table
-  In order spend less time rolling dice and lookin gup info on a table
+  In order spend less time rolling dice and looking up info on a table
   I want to get the activated unit by clicking a button
   And I want to see what number was rolled
 
